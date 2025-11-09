@@ -83,6 +83,15 @@ function createUI(thisObj) {
     panel.createCompButton.onClick = function () {
       try {
         logger.log("コンポジション作成ボタンがクリックされました");
+
+        // オーディオファイルが追加されているか確認
+        if (!audioFiles || audioFiles.length === 0) {
+          alert("警告: オーディオファイルが追加されていません。\n先に「オーディオファイルを追加」ボタンでオーディオファイルを追加してください。");
+          panel.statusText.text = "オーディオファイルが追加されていません";
+          logger.log("オーディオファイルが追加されていないため、コンポジション作成を中止しました");
+          return;
+        }
+
         panel.statusText.text = "コンポジションを作成しています...";
         createCompositions();
         panel.statusText.text = "コンポジションを作成しました";

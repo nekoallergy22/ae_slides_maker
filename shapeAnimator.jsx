@@ -4,47 +4,43 @@ function animateShapeLayers() {
   var logger = new Logger("ShapeAnimator");
 
   try {
-    // アクティブなコンポジションを取得
-    var activeComp = app.project.activeItem;
-
-    if (!(activeComp instanceof CompItem)) {
-      alert(
-        "アクティブなコンポジションがありません。コンポジションを選択してください。"
-      );
-      logger.log("アクティブなコンポジションがありません");
-      return false;
-    }
-
-    logger.log(
-      "メインコンポジション「" +
-        activeComp.name +
-        "」のサブコンポジションにアニメーションを適用します"
-    );
+    logger.log("slideフォルダ内のコンポジションにアニメーションを適用します");
 
     // アンドゥグループを開始
     app.beginUndoGroup("レイヤーのアニメーション適用");
 
-    // 集合体としてのコンポジションリスト
-    var compList = [];
-    compList.push(activeComp); // メインコンポジションも含める
-
-    // サブコンポジションを探す
-    for (var i = 1; i <= activeComp.numLayers; i++) {
-      var layer = activeComp.layer(i);
-      if (layer.source && layer.source instanceof CompItem) {
-        compList.push(layer.source);
+    // slideフォルダを検索
+    var slideFolder = null;
+    for (var i = 1; i <= app.project.numItems; i++) {
+      var item = app.project.item(i);
+      if (item instanceof FolderItem && item.name === "slide") {
+        slideFolder = item;
+        break;
       }
     }
 
-    // 重複を排除
+    if (!slideFolder) {
+      alert("slideフォルダが見つかりません。先にコンポジションを作成してください。");
+      logger.log("slideフォルダが見つかりませんでした");
+      app.endUndoGroup();
+      return false;
+    }
+
+    // slideフォルダ内のすべてのコンポジションを取得
     var uniqueComps = [];
-    var compNames = {};
-    for (var j = 0; j < compList.length; j++) {
-      var comp = compList[j];
-      if (!compNames[comp.name]) {
-        uniqueComps.push(comp);
-        compNames[comp.name] = true;
+    for (var j = 1; j <= slideFolder.numItems; j++) {
+      var item = slideFolder.item(j);
+      if (item instanceof CompItem) {
+        uniqueComps.push(item);
+        logger.log("処理対象のコンポジションを検出: " + item.name);
       }
+    }
+
+    if (uniqueComps.length === 0) {
+      alert("slideフォルダ内にコンポジションが見つかりません。");
+      logger.log("slideフォルダ内にコンポジションがありませんでした");
+      app.endUndoGroup();
+      return false;
     }
 
     // 各コンポジションに対してアニメーションを適用
@@ -125,59 +121,11 @@ function extendLayersToCompDuration(comp) {
         layer.outPoint = comp.duration;
         layersExtended++;
       }
-
-      // サブコンポジションの場合は、そのコンポジション内のレイヤーも処理
-      if (layer.source instanceof CompItem) {
-        var subComp = layer.source;
-        var subLayersExtended = extendLayersInSubComp(subComp);
-        layersExtended += subLayersExtended;
-      }
     }
   }
 
   logger.log(
     "スライド「" +
-      comp.name +
-      "」の" +
-      layersExtended +
-      "個のレイヤー長さを調整しました。"
-  );
-  return layersExtended;
-}
-
-// サブコンポジション内のレイヤーの長さを調整する関数
-function extendLayersInSubComp(comp) {
-  var logger = new Logger("ShapeAnimator");
-  var layersExtended = 0;
-
-  logger.log(
-    "サブコンポジション「" + comp.name + "」のレイヤー長さを調整します"
-  );
-
-  for (var i = 1; i <= comp.numLayers; i++) {
-    var layer = comp.layer(i);
-
-    // オーディオレイヤー以外のレイヤーを処理
-    if (!layer.hasAudio || (layer.hasVideo && layer.hasAudio)) {
-      // レイヤーのout点をコンポジションの長さに合わせる
-      var currentOutPoint = layer.outPoint;
-
-      if (currentOutPoint < comp.duration) {
-        layer.outPoint = comp.duration;
-        layersExtended++;
-      }
-
-      // さらにネストされたサブコンポジションがあれば再帰的に処理
-      if (layer.source instanceof CompItem) {
-        var nestedComp = layer.source;
-        var nestedLayersExtended = extendLayersInSubComp(nestedComp);
-        layersExtended += nestedLayersExtended;
-      }
-    }
-  }
-
-  logger.log(
-    "サブコンポジション「" +
       comp.name +
       "」の" +
       layersExtended +

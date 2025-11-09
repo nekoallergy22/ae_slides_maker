@@ -1,11 +1,11 @@
 {
   "project": {
-    "proj_id": "008",
-    "name": "g-08",
-    "num_slide": 10,
-    "num_audio": 47,
-    "create_at": "2025-04-13",
-    "update_at": "2025-04-13"
+    "proj_id": "test",
+    "name": "test",
+    "num_slide": 9,
+    "num_audio": 68,
+    "create_at": "2025-11-09",
+    "update_at": "2025-11-09"
   },
   "voiceSettings": {
     "language": "ja-JP",
@@ -16,413 +16,552 @@
   "audios": [
     {
       "id": 1,
-      "text": "みなさんこんにちは。",
-      "duration": 1608,
+      "text": "それでは今回のレクチャーでは、 エキスパートシステム, デンドラル, MYCIN, ELIZA, ワトソン, とうロボくん について紹介します。",
+      "duration": 10128,
       "slideNumber": 1,
       "slideOrder": 1
     },
     {
       "id": 2,
-      "text": "今回は、「ボードゲームとハノイの塔」について、初心者の方にも分かりやすく解説していきます。",
-      "duration": 7104,
+      "text": "前回は、知識表現について、意味ネットワークやオントロジーなどの手法を理解することができました。",
+      "duration": 7680,
       "slideNumber": 1,
       "slideOrder": 2
     },
     {
       "id": 3,
-      "text": "是非最後までご覧ください。",
-      "duration": 2256,
+      "text": "今回のレクチャーでは、エキスパートシステムとその具体例について、初心者の方にも分かりやすく解説していきます。",
+      "duration": 8616,
       "slideNumber": 1,
       "slideOrder": 3
     },
     {
       "id": 4,
-      "text": "はじめにボードゲームについてです。",
-      "duration": 2520,
+      "text": "是非最後までご覧ください。",
+      "duration": 2256,
+      "slideNumber": 1,
+      "slideOrder": 4
+    },
+    {
+      "id": 5,
+      "text": "初めに エキスパートシステム について解説します。",
+      "duration": 3576,
       "slideNumber": 2,
       "slideOrder": 1
     },
     {
-      "id": 5,
-      "text": "1950年代、探索・推論の時代においては、AIの性能を評価する際に、皆さんお馴染みのボードゲームを使っていました。",
-      "duration": 11280,
+      "id": 6,
+      "text": "エキスパートシステム とは、特定の専門分野の知識を持ち、専門家のように、事象の推論や判断ができるようにした、コンピュータシステムです。",
+      "duration": 11400,
       "slideNumber": 2,
       "slideOrder": 2
     },
     {
-      "id": 6,
-      "text": "ボードゲームは、盤の上でコマを動かすゲームの総称です。",
-      "duration": 5040,
+      "id": 7,
+      "text": "要するに、何も知らない素人でも、専門家レベルの問題が解決できるように、専門家の知識をシステムに蓄積しておいて、その知識をもとにしていろんな判断を行うコンピュータプログラムのことです。",
+      "duration": 15000,
       "slideNumber": 2,
       "slideOrder": 3
     },
     {
-      "id": 7,
-      "text": "AI評価の際に使用するボードゲームの特徴としては、次の3つがポイントです。",
-      "duration": 6552,
+      "id": 8,
+      "text": "たとえば、医療分野では、医師が患者の症状を入力することで、可能性のある病気や治療法を提案したりすることができます。",
+      "duration": 10056,
       "slideNumber": 2,
       "slideOrder": 4
     },
     {
-      "id": 8,
-      "text": "明確なルールと勝敗条件がある。",
-      "duration": 2904,
+      "id": 9,
+      "text": "また、金融分野では、市場データを分析することで、最適な投資戦略を提案したり、法務分野では、法律に関する質問に対して、適切な法的アドバイスを提供したりすることもできます。",
+      "duration": 15528,
       "slideNumber": 2,
       "slideOrder": 5
     },
     {
-      "id": 9,
-      "text": "偶然の要素がない。",
-      "duration": 1920,
+      "id": 10,
+      "text": "このようにエキスパートシステムは、専門家の知識を多くの人が共有できるため、人的ミスを減らしたり、意思決定の一貫性をたもったりすることができます。",
+      "duration": 12120,
       "slideNumber": 2,
       "slideOrder": 6
     },
     {
-      "id": 10,
-      "text": "全ての情報が公開されている。",
-      "duration": 2664,
+      "id": 11,
+      "text": "一方で、とてもたくさんの知識を更新することが必要だったり、特定の専門家の知識に偏ってしまったり、知識をゲットするためのお金がかかったり、といったデメリットもあります。",
+      "duration": 13584,
       "slideNumber": 2,
       "slideOrder": 7
     },
     {
-      "id": 11,
-      "text": "特に、チェスや将棋、囲碁などがこれにあたります。",
-      "duration": 4488,
+      "id": 12,
+      "text": "以上が エキスパートシステム についてです。",
+      "duration": 2976,
       "slideNumber": 2,
       "slideOrder": 8
     },
     {
-      "id": 12,
-      "text": "このようなボードゲームを活用することで、特定の範囲に限定した状況下における、AIの計算能力の高さや、戦略的思考の良し悪しを評価することができます。",
-      "duration": 12936,
-      "slideNumber": 2,
-      "slideOrder": 9
-    },
-    {
       "id": 13,
-      "text": "要するに、簡単なゲームならどれくらい解けるのかをチェックできるということです。",
-      "duration": 5904,
-      "slideNumber": 2,
-      "slideOrder": 10
+      "text": "次に、 デンドラル について解説します。",
+      "duration": 3144,
+      "slideNumber": 3,
+      "slideOrder": 1
     },
     {
       "id": 14,
-      "text": "いきなり、画像認識や動画生成のような難しい問題を解くことはできません。",
-      "duration": 6240,
-      "slideNumber": 2,
-      "slideOrder": 11
+      "text": "デンドラル とは、1960 年代にスタンフォード大学で開発された、未知の有機化合物について、分子構造を特定することができるシステムです。",
+      "duration": 11544,
+      "slideNumber": 3,
+      "slideOrder": 2
     },
     {
       "id": 15,
-      "text": "そこで、優しい問題から、徐々にできることを見つけていき、ステップアップしていくのは、AIに限らず何かを研究する時の基本です。",
-      "duration": 10776,
-      "slideNumber": 2,
-      "slideOrder": 12
+      "text": "デンドラルは、世界初の実用的なエキスパートシステムとして知られています。",
+      "duration": 6000,
+      "slideNumber": 3,
+      "slideOrder": 3
     },
     {
       "id": 16,
-      "text": "ここでは、AIの性能評価にボードゲームを使用していた、という点を押さえておきましょう。",
-      "duration": 7104,
-      "slideNumber": 2,
-      "slideOrder": 13
+      "text": "要するに、化学者が行うような判断を蓄積しておくことで、化学物質の構造を分析するコンピュータプログラムです。",
+      "duration": 9144,
+      "slideNumber": 3,
+      "slideOrder": 4
     },
     {
       "id": 17,
-      "text": "次に、AlphaGo　について紹介します。",
-      "duration": 3192,
+      "text": "たとえば、まだ知られていない有機化合物について分析を行った結果を、この デンドラル に入力することで、その物質について可能性のある分子構造を提案してくれます。",
+      "duration": 12768,
       "slideNumber": 3,
-      "slideOrder": 1
+      "slideOrder": 5
     },
     {
       "id": 18,
-      "text": "AlphaGoとは、2016年に世界で初めて、世界トップの棋士に勝利した、囲碁のAIです。",
-      "duration": 8184,
+      "text": "これは、デンドラルが、膨大な有機化学の知識を持っているからできることです。",
+      "duration": 6288,
       "slideNumber": 3,
-      "slideOrder": 2
+      "slideOrder": 6
     },
     {
       "id": 19,
-      "text": "AlphaGoは、Google DeepMindによって開発された囲碁プログラムで、ディープラーニングと強化学習を組み合わせた、新しい技術を用いています。",
-      "duration": 10728,
+      "text": "このようにデンドラル は、化学者の専門知識をコンピュータ上で再現することで、分析の効率を上げることができました。",
+      "duration": 9024,
       "slideNumber": 3,
-      "slideOrder": 3
+      "slideOrder": 7
     },
     {
       "id": 20,
-      "text": "これにより、膨大な数の囲碁の局面を解析し、最適な手を選ぶ能力を持つようになりました。",
-      "duration": 8064,
+      "text": "一方で、当時のコンピュータの処理能力は弱かったため、複雑な化合物の分析には限界がある、というデメリットもありました。",
+      "duration": 9912,
       "slideNumber": 3,
-      "slideOrder": 4
+      "slideOrder": 8
     },
     {
       "id": 21,
-      "text": "要するに、AIは、人間のトッププレイヤーを超える能力を持つ、ということが証明されてしまったということです。",
-      "duration": 8832,
+      "text": "以上が デンドラル についてです。",
+      "duration": 2352,
       "slideNumber": 3,
-      "slideOrder": 5
+      "slideOrder": 9
     },
     {
       "id": 22,
-      "text": "AlphaGoは、世界に衝撃を与え、AI研究における大きなブレークスルーとなりました。",
-      "duration": 7416,
-      "slideNumber": 3,
-      "slideOrder": 6
+      "text": "さて、次に、 MYCIN について解説します。",
+      "duration": 4032,
+      "slideNumber": 4,
+      "slideOrder": 1
     },
     {
       "id": 23,
-      "text": "さて、最後に、ハノイの塔について紹介します。",
-      "duration": 4488,
+      "text": "MYCIN とは、1970 年代にスタンフォード大学で開発された、血液中のバクテリア感染症の診断と、抗生物質治療を支援するエキスパートシステムです。",
+      "duration": 13080,
       "slideNumber": 4,
-      "slideOrder": 1
+      "slideOrder": 2
     },
     {
       "id": 24,
-      "text": "ハノイの塔とは、古典的なパズルゲームで、3本の棒と、複数の異なるサイズのディスクを使います。",
-      "duration": 8616,
-      "slideNumber": 4,
-      "slideOrder": 2
-    },
-    {
-      "id": 25,
-      "text": "このゲームの目的は、すべてのディスクを、ある棒から別の棒に移動することです。",
-      "duration": 6600,
+      "text": "要するに、感染症の専門医のように振る舞い、患者の症状や検査結果から、適切な抗生物質を提案してくれるコンピュータプログラムです。",
+      "duration": 10896,
       "slideNumber": 4,
       "slideOrder": 3
     },
     {
+      "id": 25,
+      "text": "たとえば、名前、性別、年齢などの患者の基本情報と、発熱、頭痛などの症状、そして検査結果を、MYCINに入力します。",
+      "duration": 12024,
+      "slideNumber": 4,
+      "slideOrder": 4
+    },
+    {
       "id": 26,
-      "text": "このとき、次のルールを守らなければなりません。",
-      "duration": 4032,
+      "text": "するとMYCIN は、そのデータを分析して、感染の可能性が高い細菌や、適切な抗生物質を処方してくれます。",
+      "duration": 9552,
+      "slideNumber": 4,
+      "slideOrder": 5
+    },
+    {
+      "id": 27,
+      "text": "このように、MYCIN を使うことで、医療診断の支援ができることが分かりました。",
+      "duration": 6384,
+      "slideNumber": 4,
+      "slideOrder": 6
+    },
+    {
+      "id": 28,
+      "text": "一方で、MYCIN は自身の限界を正確に認識できてません。",
+      "duration": 5352,
+      "slideNumber": 4,
+      "slideOrder": 7
+    },
+    {
+      "id": 29,
+      "text": "例えば、コレラ菌の場合には、単に抗生物質を処方するだけであり、患者が命を落とす可能性などを考慮することはできませんでした。",
+      "duration": 10656,
+      "slideNumber": 4,
+      "slideOrder": 8
+    },
+    {
+      "id": 30,
+      "text": "以上が MYCIN についてです。",
+      "duration": 2280,
+      "slideNumber": 4,
+      "slideOrder": 9
+    },
+    {
+      "id": 31,
+      "text": "さて、次に、 ELIZA について解説します。",
+      "duration": 4056,
       "slideNumber": 5,
       "slideOrder": 1
     },
     {
-      "id": 27,
-      "text": "3本の棒（A, B, C）があり、最初にすべてのディスクが、棒Aに積まれています。",
-      "duration": 8184,
+      "id": 32,
+      "text": "ELIZA とは、1960 年代半ばに開発された、初期の自然言語処理プログラムで、特に精神療法医をまねしたチャットボットです。",
+      "duration": 10968,
       "slideNumber": 5,
       "slideOrder": 2
     },
     {
-      "id": 28,
-      "text": "ディスクはサイズ順に積まれており、下に行くほど大きくなります。",
-      "duration": 5064,
+      "id": 33,
+      "text": "要するに、人間との会話をシミュレートする単純なプログラムであり、質問を返すことで、対話を続けるシステムです。",
+      "duration": 9168,
       "slideNumber": 5,
       "slideOrder": 3
     },
     {
-      "id": 29,
-      "text": "目標は、すべてのディスクを棒Cに移動することです。",
-      "duration": 4680,
+      "id": 34,
+      "text": "まさに、現在のChatGPTの、元祖となるシステムです。",
+      "duration": 5088,
       "slideNumber": 5,
       "slideOrder": 4
     },
     {
-      "id": 30,
-      "text": "そして、ハノイの塔の注目ポイントは、次の2つのルールです。",
-      "duration": 5400,
+      "id": 35,
+      "text": "たとえば、ユーザーが「落ち込んでいる」と入力すると、ELIZA は、「なるほど、あなたは落ち込んでいるのですね」といった返答をしてくれます。",
+      "duration": 10608,
       "slideNumber": 5,
       "slideOrder": 5
     },
     {
-      "id": 31,
-      "text": "まず、一度に1枚のディスクしか移動できない。",
-      "duration": 4008,
+      "id": 36,
+      "text": "こんな感じで、あたかも会話を理解しているかのように振る舞うため、これはまるで人間のようだ、と誤認する人も多くいました。",
+      "duration": 9336,
       "slideNumber": 5,
       "slideOrder": 6
     },
     {
-      "id": 32,
-      "text": "そして、大きいディスクを、小さいディスクの上に置くことはできない。",
-      "duration": 5304,
+      "id": 37,
+      "text": "一方で、実際には入力された意味をまったく理解しておらず、複雑な質問には対応できないため、「人工無能」と表現されることもありました。",
+      "duration": 11376,
       "slideNumber": 5,
       "slideOrder": 7
     },
     {
-      "id": 33,
-      "text": "さて、この問題はどうやって解くのでしょうか？。",
-      "duration": 3672,
-      "slideNumber": 6,
-      "slideOrder": 1
-    },
-    {
-      "id": 34,
-      "text": "適当にやっていったら運良く解けそうですが、数学的な最短の手数が知りたいです。",
-      "duration": 6648,
-      "slideNumber": 6,
-      "slideOrder": 2
-    },
-    {
-      "id": 35,
-      "text": "そこで、ハノイの塔の解法では、再帰的なアルゴリズムを用います。",
-      "duration": 5880,
-      "slideNumber": 6,
-      "slideOrder": 3
-    },
-    {
-      "id": 36,
-      "text": "再帰アルゴリズムとは、問題を小さな部分に分割し、その解法を繰り返し適用する方法です。",
-      "duration": 8208,
-      "slideNumber": 6,
-      "slideOrder": 4
-    },
-    {
-      "id": 37,
-      "text": "細かく理解する必要はないですが、参考として、具体的なステップはこのようになります。",
-      "duration": 7032,
-      "slideNumber": 7,
-      "slideOrder": 1
-    },
-    {
       "id": 38,
-      "text": "このプロセスを繰り返すことで、すべてのディスクを目的の棒に移動することができます。",
-      "duration": 6552,
-      "slideNumber": 7,
-      "slideOrder": 2
+      "text": "このように、ELIZA は単純なパターンマッチングを使うことで、人間らしい対話を生み出せるが、それには限界がある、ということがわかりました。",
+      "duration": 10584,
+      "slideNumber": 5,
+      "slideOrder": 8
     },
     {
       "id": 39,
-      "text": "ハノイの塔の最短手数は、ディスクの枚数が増えるごとに、指数関数的に増加します。",
-      "duration": 7488,
-      "slideNumber": 8,
-      "slideOrder": 1
+      "text": "以上が ELIZA についてです。",
+      "duration": 2232,
+      "slideNumber": 5,
+      "slideOrder": 9
     },
     {
       "id": 40,
-      "text": "具体的には、ディスクの枚数をnとすると、最短手数は、 2のn乗 マイナス 1 となります。",
-      "duration": 8208,
+      "text": "さて、次に、 ワトソン について解説します。",
+      "duration": 3984,
+      "slideNumber": 6,
+      "slideOrder": 1
+    },
+    {
+      "id": 41,
+      "text": "ワトソン とは、IBM が開発した人工知能システムで、自然言語処理、情報検索、機械学習などの技術を統合し、様々な分野での意思決定を支援する AI プラットフォームです。",
+      "duration": 15312,
+      "slideNumber": 6,
+      "slideOrder": 2
+    },
+    {
+      "id": 42,
+      "text": "要するに、膨大な情報を分析して、人間の質問に答えたり、ビジネス上の意思決定を支援したりする、高度な AI システムです。",
+      "duration": 10752,
+      "slideNumber": 6,
+      "slideOrder": 3
+    },
+    {
+      "id": 43,
+      "text": "たとえば、2011 年にはクイズ番組に出場し、当時の世界チャンピオンを破って優勝することもできました。",
+      "duration": 8856,
+      "slideNumber": 6,
+      "slideOrder": 4
+    },
+    {
+      "id": 44,
+      "text": "また、クイズ以外にも、風力タービンや石油掘削装置を点検して、腐食や緩んだケーブルなどの不具合を、自動的に特定する、といった活用もされています。",
+      "duration": 12792,
+      "slideNumber": 6,
+      "slideOrder": 5
+    },
+    {
+      "id": 45,
+      "text": "このようにワトソンは、現在もなおアップデートが進められている、AI プラットフォームです。",
+      "duration": 6912,
+      "slideNumber": 6,
+      "slideOrder": 6
+    },
+    {
+      "id": 46,
+      "text": "以上が ワトソン についてです。",
+      "duration": 2328,
+      "slideNumber": 6,
+      "slideOrder": 7
+    },
+    {
+      "id": 47,
+      "text": "さて、最後に、 とうロボくん について解説します。",
+      "duration": 4440,
+      "slideNumber": 7,
+      "slideOrder": 1
+    },
+    {
+      "id": 48,
+      "text": "とうロボくん とは、2011 年から行われた、「ロボットは東大に入れるか」というプロジェクトで開発された、 AI システムのことです。",
+      "duration": 10560,
+      "slideNumber": 7,
+      "slideOrder": 2
+    },
+    {
+      "id": 49,
+      "text": "要するに、人工知能に大学入試レベルの問題を解かせることで、AI の可能性と限界を探る、研究プロジェクトです。",
+      "duration": 9936,
+      "slideNumber": 7,
+      "slideOrder": 3
+    },
+    {
+      "id": 50,
+      "text": "たとえばとうロボくんは、2016 年の模試で偏差値 57.1 を獲得し、受験生の上位 20%に入る成績を収めました。",
+      "duration": 11376,
+      "slideNumber": 7,
+      "slideOrder": 4
+    },
+    {
+      "id": 51,
+      "text": "さらに、500 億語もの英語データを学習させることで、英語の偏差値を、 41.0 から 50.5 まで向上させることに成功しました。",
+      "duration": 11304,
+      "slideNumber": 7,
+      "slideOrder": 5
+    },
+    {
+      "id": 52,
+      "text": "このようにとうロボくんは、統計的手法によって、ある程度の学力レベルまで到達することを証明してくれました。",
+      "duration": 8664,
+      "slideNumber": 7,
+      "slideOrder": 6
+    },
+    {
+      "id": 53,
+      "text": "しかし、AI が「意味」を真に理解できない、という根本的な限界も明らかにし、東大合格レベルには達しない、という結論で凍結してしまいました。",
+      "duration": 12408,
+      "slideNumber": 7,
+      "slideOrder": 7
+    },
+    {
+      "id": 54,
+      "text": "以上が とうロボくん についてです。",
+      "duration": 2592,
+      "slideNumber": 7,
+      "slideOrder": 8
+    },
+    {
+      "id": 55,
+      "text": "さて、今回の内容をまとめて振り返りましょう。",
+      "duration": 3816,
+      "slideNumber": 8,
+      "slideOrder": 1
+    },
+    {
+      "id": 56,
+      "text": "今回は、エキスパートシステム、デンドラル, MYCIN, ELIZA, ワトソン, とうロボくん について紹介しました。",
+      "duration": 9048,
       "slideNumber": 8,
       "slideOrder": 2
     },
     {
-      "id": 41,
-      "text": "厳密な解法を覚える必要はありませんが、最短手数は、頭の片隅に押さえておくと良いでしょう。",
-      "duration": 8280,
+      "id": 57,
+      "text": "エキスパートシステム とは、特定の専門分野の知識を持ち、専門家のように事象の推論や判断ができるようにした、コンピュータシステムです。",
+      "duration": 10944,
       "slideNumber": 8,
       "slideOrder": 3
     },
     {
-      "id": 42,
-      "text": "さて、今回の内容をまとめます。",
-      "duration": 2832,
+      "id": 58,
+      "text": "デンドラル とは、1960 年代に開発された、世界初の実用的なエキスパートシステムで、質量分析データから有機化合物の分子構造を特定するシステムです。",
+      "duration": 13608,
+      "slideNumber": 8,
+      "slideOrder": 4
+    },
+    {
+      "id": 59,
+      "text": "MYCIN とは、1970 年代に開発された、血液中のバクテリア感染症の診断と、治療を支援するエキスパートシステムです。",
+      "duration": 10992,
+      "slideNumber": 8,
+      "slideOrder": 5
+    },
+    {
+      "id": 60,
+      "text": "ELIZA とは、1960 年代半ばに開発された、初期の自然言語処理プログラムで、人間との会話をシミュレートする、単純なチャットボットです。",
+      "duration": 11736,
+      "slideNumber": 8,
+      "slideOrder": 6
+    },
+    {
+      "id": 61,
+      "text": "ワトソン とは、IBM が開発した、自然言語処理や機械学習を統合した高度な AI プラットフォームで、様々な分野での意思決定を支援するシステムです。",
+      "duration": 12288,
+      "slideNumber": 8,
+      "slideOrder": 7
+    },
+    {
+      "id": 62,
+      "text": "とうロボくん とは、2011 年から始まった、「ロボットは東大に入れるか」プロジェクトで開発された AI システムであり、大学入試レベルの問題解決能力を持つ AI の開発を目指したものです。",
+      "duration": 15432,
+      "slideNumber": 8,
+      "slideOrder": 8
+    },
+    {
+      "id": 63,
+      "text": "今回の内容は以上です。",
+      "duration": 2280,
       "slideNumber": 9,
       "slideOrder": 1
     },
     {
-      "id": 43,
-      "text": "今回は、 「ボードゲームとハノイの塔」について紹介しました。",
-      "duration": 4944,
+      "id": 64,
+      "text": "ここまでの内容を聞いて分かったとおり、これら全ての能力を、たった1つのシステムで上回ってしまうのが、現在の生成AIの技術です。",
+      "duration": 10824,
       "slideNumber": 9,
       "slideOrder": 2
     },
     {
-      "id": 44,
-      "text": "ボードゲームや簡単なパズルを使用することで、AIの性能を評価したり、AIでできることの限界を探ることができます。",
-      "duration": 9672,
+      "id": 65,
+      "text": "過去の歴史や苦悩を振り返ることで、現在のLLMがいかにすごいことを成し遂げているかが、理解できたのではないでしょうか。",
+      "duration": 9360,
       "slideNumber": 9,
       "slideOrder": 3
     },
     {
-      "id": 45,
-      "text": "また、AlphaGoのように、人間を超える性能をもつAIの登場は、大きな転換点と言えるでしょう。",
-      "duration": 8568,
+      "id": 66,
+      "text": "さて次回は、 質問応答・対話システム について紹介します。",
+      "duration": 5472,
       "slideNumber": 9,
       "slideOrder": 4
     },
     {
-      "id": 46,
-      "text": "今回の内容は以上です。",
-      "duration": 2328,
-      "slideNumber": 10,
-      "slideOrder": 1
+      "id": 67,
+      "text": "今回の内容と併せて押さえておきたい内容になりますので、ぜひご覧ください。",
+      "duration": 6144,
+      "slideNumber": 9,
+      "slideOrder": 5
     },
     {
-      "id": 47,
-      "text": "さて次回は、「minmax法」について紹介します",
-      "duration": 4632,
-      "slideNumber": 10,
-      "slideOrder": 2
+      "id": 68,
+      "text": "それでは、次のレクチャーへ進んで行きましょう。",
+      "duration": 3912,
+      "slideNumber": 9,
+      "slideOrder": 6
     }
   ],
   "slide": [
     {
       "id": 1,
       "name": "1",
-      "num_audio": 3,
-      "audio_list": [1, 2, 3],
-      "duration": 10968,
+      "num_audio": 4,
+      "audio_list": [1, 2, 3, 4],
+      "duration": 28680,
       "margin": 1000
     },
     {
       "id": 2,
       "name": "2",
-      "num_audio": 13,
-      "audio_list": [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
-      "duration": 80328,
+      "num_audio": 8,
+      "audio_list": [5, 6, 7, 8, 9, 10, 11, 12],
+      "duration": 84240,
       "margin": 1000
     },
     {
       "id": 3,
       "name": "3",
-      "num_audio": 6,
-      "audio_list": [17, 18, 19, 20, 21, 22],
-      "duration": 46416,
+      "num_audio": 9,
+      "audio_list": [13, 14, 15, 16, 17, 18, 19, 20, 21],
+      "duration": 70176,
       "margin": 1000
     },
     {
       "id": 4,
       "name": "4",
-      "num_audio": 3,
-      "audio_list": [23, 24, 25],
-      "duration": 19704,
+      "num_audio": 9,
+      "audio_list": [22, 23, 24, 25, 26, 27, 28, 29, 30],
+      "duration": 74256,
       "margin": 1000
     },
     {
       "id": 5,
       "name": "5",
-      "num_audio": 7,
-      "audio_list": [26, 27, 28, 29, 30, 31, 32],
-      "duration": 36672,
+      "num_audio": 9,
+      "audio_list": [31, 32, 33, 34, 35, 36, 37, 38, 39],
+      "duration": 73416,
       "margin": 1000
     },
     {
       "id": 6,
       "name": "6",
-      "num_audio": 4,
-      "audio_list": [33, 34, 35, 36],
-      "duration": 24408,
+      "num_audio": 7,
+      "audio_list": [40, 41, 42, 43, 44, 45, 46],
+      "duration": 60936,
       "margin": 1000
     },
     {
       "id": 7,
       "name": "7",
-      "num_audio": 2,
-      "audio_list": [37, 38],
-      "duration": 13584,
+      "num_audio": 8,
+      "audio_list": [47, 48, 49, 50, 51, 52, 53, 54],
+      "duration": 71280,
       "margin": 1000
     },
     {
       "id": 8,
       "name": "8",
-      "num_audio": 3,
-      "audio_list": [39, 40, 41],
-      "duration": 23976,
+      "num_audio": 8,
+      "audio_list": [55, 56, 57, 58, 59, 60, 61, 62],
+      "duration": 87864,
       "margin": 1000
     },
     {
       "id": 9,
       "name": "9",
-      "num_audio": 4,
-      "audio_list": [42, 43, 44, 45],
-      "duration": 26016,
-      "margin": 1000
-    },
-    {
-      "id": 10,
-      "name": "10",
-      "num_audio": 2,
-      "audio_list": [46, 47],
-      "duration": 6960,
+      "num_audio": 6,
+      "audio_list": [63, 64, 65, 66, 67, 68],
+      "duration": 37992,
       "margin": 1000
     }
   ]
