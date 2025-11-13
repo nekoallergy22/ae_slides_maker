@@ -30,15 +30,36 @@ function createCompositions() {
       logger.log("一部のオーディオファイルの配置に問題がありました");
     }
 
-    // オーディオ配置の詳細ログ出力
+    // オーディオ配置の詳細ログ出力と実際の配置数をカウント
+    var totalAudioCount = 0;
+    var detailedMessage = "";
+
     for (var i = 0; i < jsonData.slide.length; i++) {
       var slideData = jsonData.slide[i];
+      var slideComp = slideItems[i];
+
+      // 実際に配置されたオーディオレイヤー数をカウント
+      var actualAudioCount = 0;
+      for (var j = slideComp.numLayers; j >= 1; j--) {
+        var layer = slideComp.layer(j);
+        if (layer.source && layer.source instanceof FootageItem) {
+          actualAudioCount++;
+        }
+      }
+
+      totalAudioCount += actualAudioCount;
+
       if (slideData.audio_list && slideData.audio_list.length > 0) {
+        var expectedCount = slideData.audio_list.length;
+        var status = (actualAudioCount === expectedCount) ? "OK" : "エラー";
+
+        detailedMessage += "スライド " + slideData.name + ": " +
+          actualAudioCount + "/" + expectedCount + "個 (" + status + ")\n";
+
         logger.log(
-          "スライド " +
-            slideData.name +
-            " のオーディオID一覧: " +
-            slideData.audio_list.join(", ")
+          "スライド " + slideData.name +
+          " - 期待: " + expectedCount + "個, 実際: " + actualAudioCount + "個" +
+          " - オーディオID一覧: " + slideData.audio_list.join(", ")
         );
       }
     }
@@ -48,14 +69,14 @@ function createCompositions() {
       createMainComposition(jsonData.project.name, slideItems, totalDuration);
     }
 
-    alert(
-      jsonData.slide.length +
-        "個のコンポジションと関連付けられた音声データが作成されました。"
-    );
+    var summaryMessage =
+      jsonData.slide.length + "個のコンポに" + totalAudioCount + "個のオーディオを配置しました。\n\n" +
+      detailedMessage;
+
+    alert(summaryMessage);
 
     logger.log(
-      jsonData.slide.length +
-        "個のコンポジションと関連付けられた音声データが作成されました。"
+      jsonData.slide.length + "個のコンポに" + totalAudioCount + "個のオーディオを配置しました。"
     );
   } catch (e) {
     alert("コンポジション作成中にエラーが発生しました: " + e.toString());

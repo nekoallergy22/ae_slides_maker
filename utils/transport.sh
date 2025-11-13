@@ -38,6 +38,8 @@ FILES_TO_INSTALL=(
   "compUtils.jsx"
   "audioHandler.jsx"
   "shapeAnimator.jsx"
+  "vttExporter.jsx"
+  "subCompTimestampExporter.jsx"
 )
 
 # ファイルが存在するか確認

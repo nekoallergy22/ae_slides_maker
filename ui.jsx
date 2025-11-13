@@ -7,7 +7,7 @@ function createUI(thisObj) {
     var panel =
       thisObj instanceof Panel
         ? thisObj
-        : new Window("palette", "JSON読み込み", [0, 0, 260, 430]);
+        : new Window("palette", "JSON読み込み", [0, 0, 260, 550]);
     // JSONを読み込むボタン
     panel.loadButton = panel.add("button", [10, 10, 250, 40], "JSONを読み込む");
     // オーディオファイルを追加するボタン
@@ -41,8 +41,22 @@ function createUI(thisObj) {
       "アニメーション適用＆レイヤー長さ調整"
     );
 
+    // VTT字幕出力ボタン（間隔を開けて配置）
+    panel.exportVTTButton = panel.add(
+      "button",
+      [10, 410, 250, 440],
+      "VTT字幕を出力"
+    );
+
+    // サブコンポタイムスタンプリスト出力ボタン
+    panel.exportTimestampButton = panel.add(
+      "button",
+      [10, 450, 250, 480],
+      "タイムスタンプリストを出力"
+    );
+
     // ステータス表示エリア
-    panel.statusText = panel.add("statictext", [10, 380, 250, 400], "準備完了");
+    panel.statusText = panel.add("statictext", [10, 500, 250, 520], "準備完了");
 
     // パネルのリサイズ対応
     panel.onResizing = panel.onResize = function () {
@@ -121,6 +135,42 @@ function createUI(thisObj) {
         }
       } catch (e) {
         logger.log("処理中にエラーが発生しました: " + e.toString());
+        panel.statusText.text = "エラーが発生しました";
+        alert("エラーが発生しました: " + e.toString());
+      }
+    };
+
+    // VTT字幕出力ボタンのクリックイベント
+    panel.exportVTTButton.onClick = function () {
+      try {
+        logger.log("VTT字幕出力ボタンがクリックされました");
+        panel.statusText.text = "VTT字幕を出力中...";
+        var result = exportVTT();
+        if (result) {
+          panel.statusText.text = "VTT字幕を出力しました";
+        } else {
+          panel.statusText.text = "VTT出力に失敗しました";
+        }
+      } catch (e) {
+        logger.log("VTT出力中にエラーが発生しました: " + e.toString());
+        panel.statusText.text = "エラーが発生しました";
+        alert("エラーが発生しました: " + e.toString());
+      }
+    };
+
+    // タイムスタンプリスト出力ボタンのクリックイベント
+    panel.exportTimestampButton.onClick = function () {
+      try {
+        logger.log("タイムスタンプリスト出力ボタンがクリックされました");
+        panel.statusText.text = "タイムスタンプリストを出力中...";
+        var result = exportSubCompTimestamps();
+        if (result) {
+          panel.statusText.text = "タイムスタンプリストを出力しました";
+        } else {
+          panel.statusText.text = "タイムスタンプリスト出力に失敗しました";
+        }
+      } catch (e) {
+        logger.log("タイムスタンプリスト出力中にエラーが発生しました: " + e.toString());
         panel.statusText.text = "エラーが発生しました";
         alert("エラーが発生しました: " + e.toString());
       }

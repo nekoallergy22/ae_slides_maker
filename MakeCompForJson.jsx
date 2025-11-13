@@ -11,6 +11,8 @@ $.evalFile(scriptFolder + "/slideCompCreator.jsx");
 $.evalFile(scriptFolder + "/mainCompCreator.jsx");
 $.evalFile(scriptFolder + "/compCreator.jsx");
 $.evalFile(scriptFolder + "/shapeAnimator.jsx");
+$.evalFile(scriptFolder + "/vttExporter.jsx");
+$.evalFile(scriptFolder + "/subCompTimestampExporter.jsx");
 $.evalFile(scriptFolder + "/ui.jsx");
 
 // グローバルロガーインスタンスを作成

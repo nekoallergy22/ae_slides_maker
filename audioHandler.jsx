@@ -34,10 +34,13 @@ function loadAudioFiles(panel) {
       // audioフォルダに移動
       audioItem.parentFolder = audioFolder;
 
+      // ファイル名からIDを抽出（統一されたロジックを使用）
+      var extractedId = extractIdFromFileName(decodedName);
+
       audioFiles.push({
         item: audioItem,
         name: decodedName, // URLデコード済みの名前を保存
-        id: parseInt(decodedName.substring(0, 4)), // ファイル名の先頭4桁をIDとして扱う
+        id: extractedId,
         size: file.length,
       });
 
@@ -112,8 +115,9 @@ function findAudioById(id) {
 
 // ファイル名からIDを抽出する関数
 function extractIdFromFileName(fileName) {
-  // ファイル名の先頭4桁をIDとして抽出
-  var match = fileName.match(/^(\d{4})_/);
+  // ファイル名の先頭の数字（1桁以上）をIDとして抽出
+  // 例: "0001_xxx.mp3", "40_xxx.mp3", "0040_xxx.mp3" すべてに対応
+  var match = fileName.match(/^(\d+)_/);
   if (match && match[1]) {
     return parseInt(match[1], 10);
   }
@@ -150,6 +154,14 @@ function addAudioToSubComps(slideComps, jsonSlides) {
   var logger = new Logger("AudioHandler");
   var missingAudios = []; // 見つからなかったオーディオIDを記録
 
+  // デバッグ: 読み込まれているオーディオファイルの一覧をログ出力
+  logger.log("=== 読み込まれているオーディオファイル一覧 ===");
+  logger.log("オーディオファイル総数: " + audioFiles.length);
+  for (var k = 0; k < audioFiles.length; k++) {
+    logger.log("  [" + k + "] ID: " + audioFiles[k].id + ", ファイル名: " + audioFiles[k].name);
+  }
+  logger.log("==========================================");
+
   try {
     for (var i = 0; i < jsonSlides.length; i++) {
       var slideData = jsonSlides[i];
@@ -163,19 +175,37 @@ function addAudioToSubComps(slideComps, jsonSlides) {
       }
 
       logger.log(
-        "スライド " + slideData.name + " のオーディオ配置を開始します"
+        "スライド " + slideData.name + " (ID: " + slideData.id + ") のオーディオ配置を開始します - 期待数: " + slideData.audio_list.length + "個"
       );
+      logger.log("  audio_list: [" + slideData.audio_list.join(", ") + "]");
+
+      // slideCompが有効かチェック
+      if (!slideComp || !slideComp.numLayers) {
+        logger.log("*** エラー: スライド " + slideData.name + " のコンポジションが無効です");
+        continue;
+      }
+
+      logger.log("  既存レイヤー数: " + slideComp.numLayers);
 
       // 既存のオーディオレイヤーをクリア（重複配置を防ぐ）
-      for (var k = slideComp.numLayers; k >= 1; k--) {
-        var layer = slideComp.layer(k);
-        // AVLayerかつソースがFootageItemの場合はオーディオレイヤー
-        if (layer.source && layer.source instanceof FootageItem) {
-          layer.remove();
-          logger.log(
-            "スライド " + slideData.name + " から既存のオーディオレイヤー \"" + layer.name + "\" を削除しました"
-          );
+      try {
+        for (var k = slideComp.numLayers; k >= 1; k--) {
+          try {
+            var layer = slideComp.layer(k);
+            // AVLayerかつソースがFootageItemの場合はオーディオレイヤー
+            if (layer && layer.source && layer.source instanceof FootageItem) {
+              var layerName = layer.name;
+              layer.remove();
+              logger.log(
+                "    スライド " + slideData.name + " から既存のオーディオレイヤー \"" + layerName + "\" を削除しました"
+              );
+            }
+          } catch (layerError) {
+            logger.log("    レイヤー " + k + " の削除中にエラー: " + layerError.toString());
+          }
         }
+      } catch (clearError) {
+        logger.log("  既存レイヤークリア中にエラー: " + clearError.toString());
       }
 
       // 現在の時間位置を追跡（マージンを削除し、0から開始）
@@ -183,20 +213,25 @@ function addAudioToSubComps(slideComps, jsonSlides) {
 
       for (var j = 0; j < slideData.audio_list.length; j++) {
         var audioId = slideData.audio_list[j];
+
+        logger.log("  [" + (j + 1) + "/" + slideData.audio_list.length + "] オーディオID " + audioId + " を検索中...");
+
         var audioFile = findAudioById(audioId);
 
         if (!audioFile) {
           var errorMsg = "スライド " + slideData.name + " - ID " + audioId;
           missingAudios.push(errorMsg);
           logger.log(
-            "スライド " +
+            "    *** エラー: スライド " +
               slideData.name +
               " に対応するID " +
               audioId +
-              " のオーディオが見つかりませんでした"
+              " のオーディオが見つかりませんでした ***"
           );
           continue;
         }
+
+        logger.log("    見つかりました: " + audioFile.name + " (ID: " + audioFile.id + ")");
 
         // オーディオファイルの長さを取得
         var audioDuration = getAudioDuration(audioFile.item);
@@ -232,8 +267,18 @@ function addAudioToSubComps(slideComps, jsonSlides) {
         );
       }
 
+      // 配置完了後の確認
+      var placedCount = 0;
+      for (var m = slideComp.numLayers; m >= 1; m--) {
+        var checkLayer = slideComp.layer(m);
+        if (checkLayer.source && checkLayer.source instanceof FootageItem) {
+          placedCount++;
+        }
+      }
+
       logger.log(
-        "スライド " + slideData.name + " のオーディオ配置が完了しました"
+        "スライド " + slideData.name + " のオーディオ配置が完了しました - 配置数: " +
+        placedCount + "/" + slideData.audio_list.length
       );
     }
 
