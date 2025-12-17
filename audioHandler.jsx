@@ -186,7 +186,7 @@ function addAudioToSubComps(slideComps, jsonSlides) {
       logger.log("  audio_list: [" + slideData.audio_list.join(", ") + "]");
 
       // slideCompが有効かチェック
-      if (!slideComp || !slideComp.numLayers) {
+      if (!slideComp) {
         logger.log("*** エラー: スライド " + slideData.name + " のコンポジションが無効です");
         continue;
       }
