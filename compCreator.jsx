@@ -42,7 +42,9 @@ function createCompositions() {
       var actualAudioCount = 0;
       for (var j = slideComp.numLayers; j >= 1; j--) {
         var layer = slideComp.layer(j);
-        if (layer.source && layer.source instanceof FootageItem) {
+        // オーディオファイルのみカウント（画像ファイルは除外）
+        if (layer.source && layer.source instanceof FootageItem &&
+            layer.source.hasAudio && !layer.source.hasVideo) {
           actualAudioCount++;
         }
       }

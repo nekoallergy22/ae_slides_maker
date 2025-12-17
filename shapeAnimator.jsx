@@ -145,7 +145,9 @@ function animateLayersInComp(comp) {
     var layerInPoint = layer.inPoint;
 
     if (isShapeLayer(layer)) {
-      applyScaleAnimation(layer, layerInPoint, comp.frameRate);
+      // 「title-line」という名前のレイヤーの場合は180フレーム、それ以外は20フレーム
+      var animationFrames = (layer.name === "title-line") ? 180 : 20;
+      applyScaleAnimation(layer, layerInPoint, comp.frameRate, animationFrames);
       shapesAnimated++;
     } else if (layer instanceof TextLayer) {
       applyOpacityAnimation(layer, layerInPoint, comp.frameRate);
@@ -180,9 +182,14 @@ function isShapeLayer(layer) {
 }
 
 // スケールアニメーションを適用する関数
-function applyScaleAnimation(layer, startTime, frameRate) {
+function applyScaleAnimation(layer, startTime, frameRate, frames) {
   var transform = layer.transform;
   var scale = transform.scale;
+
+  // フレーム数が指定されていない場合はデフォルト20フレーム
+  if (typeof frames === "undefined") {
+    frames = 20;
+  }
 
   // 現在のスケール値を保存
   var currentScale = scale.value;
@@ -190,10 +197,10 @@ function applyScaleAnimation(layer, startTime, frameRate) {
   // レイヤーの開始時間にキーフレームを追加（0%）
   scale.setValueAtTime(startTime, [0, 0]);
 
-  // 10フレーム後の時間を計算
-  var endTime = startTime + 20 / frameRate;
+  // 指定フレーム後の時間を計算
+  var endTime = startTime + frames / frameRate;
 
-  // 10フレーム後にキーフレームを追加（現在のスケール値）
+  // 指定フレーム後にキーフレームを追加（現在のスケール値）
   scale.setValueAtTime(endTime, currentScale);
 
   // イージングを適用

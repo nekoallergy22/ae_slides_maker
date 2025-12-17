@@ -43,14 +43,15 @@ function exportVTT() {
     // VTT形式で出力
     var vttContent = generateVTTContent(audioEntries);
 
-    // ファイル保存ダイアログを表示（デスクトップにデフォルト名を設定）
-    var desktopPath = Folder.desktop.fsName;
-    var defaultFile = new File(desktopPath + "/cc.vtt");
-    var saveFile = defaultFile.saveDlg("VTTファイルを保存");
-    if (!saveFile) {
-      logger.log("ファイル保存がキャンセルされました");
-      return false;
+    // プロジェクトファイルと同階層に保存
+    // プロジェクトが未保存の場合はデスクトップにフォールバック
+    var saveFolder;
+    if (app.project.file) {
+      saveFolder = app.project.file.parent.fsName;
+    } else {
+      saveFolder = Folder.desktop.fsName;
     }
+    var saveFile = new File(saveFolder + "/cc.vtt");
 
     // ファイルに書き込み
     saveFile.encoding = "UTF-8";

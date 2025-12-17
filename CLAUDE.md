@@ -38,17 +38,21 @@ The codebase follows a modular architecture where functionality is split across 
   6. mainCompCreator.jsx
   7. compCreator.jsx
   8. shapeAnimator.jsx
-  9. ui.jsx
+  9. vttExporter.jsx
+  10. subCompTimestampExporter.jsx
+  11. ui.jsx
 
 ### Core Modules
 
 **logger.jsx** - Simple logging utility that writes to `MakeCompForJson.txt` on the desktop with timestamps
 
-**ui.jsx** - ScriptUI panel with 4 main buttons:
+**ui.jsx** - ScriptUI panel with 6 main buttons:
 1. "JSONを読み込む" - Load JSON configuration
 2. "オーディオファイルを追加" - Import audio files
 3. "コンポジションを作成" - Create compositions (enabled after JSON load)
 4. "アニメーション適用＆レイヤー長さ調整" - Apply animations and adjust layer durations
+5. "VTT字幕を出力" - Export WebVTT subtitle file
+6. "タイムスタンプリストを出力" - Export timestamp list for sub-compositions
 
 **jsonHandler.jsx** - Handles JSON file selection, parsing, and validation. Stores parsed data in global `jsonData` variable
 
@@ -92,6 +96,23 @@ The codebase follows a modular architecture where functionality is split across 
 - `extendLayersToCompDuration()` - Extends all non-audio layers to match composition duration
 - `applyInOutOpacityTransition()` - 20-frame fade in/out for slide transitions in main comp
 - All animations use bezier easing (KeyframeEase: speed=0.5, influence=50)
+
+**vttExporter.jsx** - Exports WebVTT subtitle files:
+- `exportVTT()` - Main export function that creates VTT subtitles from audio layers
+- `collectAudioEntries()` - Recursively collects all audio layers from main comp and nested comps (excludes "base" comps)
+- `getAudioTextById()` - Maps audio IDs to transcript text from JSON data
+- `generateVTTContent()` - Generates WEBVTT format with timestamps and text
+- Output file: `cc.vtt` saved next to project file (or Desktop if project unsaved)
+- Format: `HH:MM:SS.mmm` timestamps with sequential cue numbers
+
+**subCompTimestampExporter.jsx** - Exports timestamp list for video chapters:
+- `exportSubCompTimestamps()` - Main export function for sub-composition timestamps
+- `collectSubCompEntries()` - Collects all sub-comps from main comp (excludes "base" and "end" comps)
+- `getFirstAudioName()` - Extracts first audio filename from each sub-comp (removes ID prefix and extension)
+- `cleanupText()` - Removes common Japanese phrases like "はじめに", "次に", "について解説します"
+- `replaceSpecialPhrases()` - Replaces specific phrases (e.g., "まとめ", "ご視聴ありがとうございました")
+- Output file: `timecodes.txt` saved next to project file (or Desktop if project unsaved)
+- Format: `MM:SS Title` for YouTube chapter timestamps
 
 ## JSON Data Format
 
@@ -143,6 +164,8 @@ The script expects JSON with this structure:
    - Apply scale/opacity animations to all shapes and text
    - Extend all non-audio layers to match composition duration
    - Process all nested sub-compositions recursively
+6. (Optional) Click "Export VTT Subtitles" to generate WebVTT subtitle file with audio transcripts
+7. (Optional) Click "Export Timestamp List" to generate YouTube chapter timestamps
 
 ## Development Notes
 

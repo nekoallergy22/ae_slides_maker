@@ -1,7 +1,16 @@
 // logger.jsx - ログ機能を提供するモジュール
 function Logger(scriptName) {
   this.scriptName = scriptName;
-  this.logFile = new File(Folder.desktop.fsName + "/MakeCompForJson.txt");
+
+  // プロジェクトファイルと同階層にログを保存
+  // プロジェクトが未保存の場合はデスクトップにフォールバック
+  var logFolder;
+  if (app.project.file) {
+    logFolder = app.project.file.parent.fsName;
+  } else {
+    logFolder = Folder.desktop.fsName;
+  }
+  this.logFile = new File(logFolder + "/log.txt");
 
   this.log = function (message) {
     try {

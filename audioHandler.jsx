@@ -31,6 +31,12 @@ function loadAudioFiles(panel) {
       var importOptions = new ImportOptions(file);
       var audioItem = app.project.importFile(importOptions);
 
+      // インポート成功を確認
+      if (!audioItem || !(audioItem instanceof FootageItem)) {
+        logger.log("警告: ファイルのインポートに失敗しました: " + decodedName);
+        continue;
+      }
+
       // audioフォルダに移動
       audioItem.parentFolder = audioFolder;
 
@@ -44,7 +50,7 @@ function loadAudioFiles(panel) {
         size: file.length,
       });
 
-      logger.log("オーディオファイルをプロジェクトに追加: " + decodedName);
+      logger.log("オーディオファイルをプロジェクトに追加: " + decodedName + " (ID: " + extractedId + ")");
     }
 
     // UI表示を更新
@@ -192,8 +198,11 @@ function addAudioToSubComps(slideComps, jsonSlides) {
         for (var k = slideComp.numLayers; k >= 1; k--) {
           try {
             var layer = slideComp.layer(k);
-            // AVLayerかつソースがFootageItemの場合はオーディオレイヤー
-            if (layer && layer.source && layer.source instanceof FootageItem) {
+            // AVLayerかつソースがFootageItemで、かつオーディオファイルの場合のみ削除
+            // オーディオファイル: hasAudio=true && hasVideo=false
+            // 画像ファイル: hasVideo=true && hasAudio=false (これは残す)
+            if (layer && layer.source && layer.source instanceof FootageItem &&
+                layer.source.hasAudio && !layer.source.hasVideo) {
               var layerName = layer.name;
               layer.remove();
               logger.log(
@@ -233,45 +242,81 @@ function addAudioToSubComps(slideComps, jsonSlides) {
 
         logger.log("    見つかりました: " + audioFile.name + " (ID: " + audioFile.id + ")");
 
+        // audioFile.itemが有効かチェック
+        if (!audioFile.item || !(audioFile.item instanceof FootageItem)) {
+          logger.log("    *** エラー: オーディオアイテムが無効です (ID: " + audioId + ")");
+          missingAudios.push("スライド " + slideData.name + " - ID " + audioId + " (アイテムが無効)");
+          continue;
+        }
+
+        // プロジェクトアイテムが有効か追加チェック
+        try {
+          var itemName = audioFile.item.name; // アクセステスト
+        } catch (itemError) {
+          logger.log("    *** エラー: オーディオアイテムにアクセスできません (ID: " + audioId + "): " + itemError.toString());
+          missingAudios.push("スライド " + slideData.name + " - ID " + audioId + " (アクセス不可)");
+          continue;
+        }
+
         // オーディオファイルの長さを取得
         var audioDuration = getAudioDuration(audioFile.item);
 
         // サブコンポジションにレイヤーとして追加
-        var layer = slideComp.layers.add(audioFile.item);
+        try {
+          var layer = slideComp.layers.add(audioFile.item);
+        } catch (addError) {
+          logger.log("    *** エラー: レイヤー追加に失敗 (ID: " + audioId + "): " + addError.toString());
+          missingAudios.push("スライド " + slideData.name + " - ID " + audioId + " (追加失敗)");
+          continue;
+        }
 
         // 開始時間を設定（マージンなし）
-        layer.startTime = currentTime;
+        try {
+          layer.startTime = currentTime;
 
-        // 次のオーディオの開始時間を更新
-        currentTime += audioDuration;
+          // 次のオーディオの開始時間を更新
+          currentTime += audioDuration;
 
-        logger.log(
-          "スライド " +
-            slideData.name +
-            " にオーディオ " +
-            audioFile.name +
-            " (ID: " +
-            audioId +
-            ")" +
-            " を追加しました。配置順序: " +
-            (j + 1) +
-            ", 開始時間: " +
-            layer.startTime +
-            "秒" +
-            ", 終了時間: " +
-            layer.outPoint +
-            "秒" +
-            ", 長さ: " +
-            (layer.outPoint - layer.startTime) +
-            "秒"
-        );
+          logger.log(
+            "スライド " +
+              slideData.name +
+              " にオーディオ " +
+              audioFile.name +
+              " (ID: " +
+              audioId +
+              ")" +
+              " を追加しました。配置順序: " +
+              (j + 1) +
+              ", 開始時間: " +
+              layer.startTime +
+              "秒" +
+              ", 終了時間: " +
+              layer.outPoint +
+              "秒" +
+              ", 長さ: " +
+              (layer.outPoint - layer.startTime) +
+              "秒"
+          );
+        } catch (timeError) {
+          logger.log("    *** エラー: レイヤー時間設定に失敗 (ID: " + audioId + "): " + timeError.toString());
+          // レイヤーは追加されているので削除
+          try {
+            layer.remove();
+          } catch (removeError) {
+            // 削除失敗は無視
+          }
+          missingAudios.push("スライド " + slideData.name + " - ID " + audioId + " (時間設定失敗)");
+          continue;
+        }
       }
 
       // 配置完了後の確認
       var placedCount = 0;
       for (var m = slideComp.numLayers; m >= 1; m--) {
         var checkLayer = slideComp.layer(m);
-        if (checkLayer.source && checkLayer.source instanceof FootageItem) {
+        // オーディオファイルのみカウント（画像ファイルは除外）
+        if (checkLayer.source && checkLayer.source instanceof FootageItem &&
+            checkLayer.source.hasAudio && !checkLayer.source.hasVideo) {
           placedCount++;
         }
       }
