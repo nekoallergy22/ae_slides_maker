@@ -6,8 +6,9 @@
 
 # 定数
 AE_SCRIPTS_DIR="/Applications/Adobe After Effects 2025/Scripts/ScriptUI Panels"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+DIR="$SCRIPT_DIR/.."
 CURRENT_DIR=$(pwd)
-DIR=$CURRENT_DIR/..
 
 echo
 echo $DIR
@@ -29,6 +30,7 @@ fi
 # インストールするファイルのリスト
 FILES_TO_INSTALL=(
   "MakeCompForJson.jsx"
+  "json2.jsx"
   "jsonHandler.jsx"
   "logger.jsx"
   "ui.jsx"

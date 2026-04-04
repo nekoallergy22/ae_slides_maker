@@ -8,8 +8,15 @@ function createUI(thisObj) {
       thisObj instanceof Panel
         ? thisObj
         : new Window("palette", "JSON読み込み", [0, 0, 260, 550]);
-    // JSONを読み込むボタン
-    panel.loadButton = panel.add("button", [10, 10, 250, 40], "JSONを読み込む");
+    // JSON操作ボタン行（横並び）
+    var jsonButtonRow = panel.add("group", [10, 10, 250, 40]);
+    jsonButtonRow.orientation = "row";
+    jsonButtonRow.spacing = 5;
+    jsonButtonRow.margins = 0;
+    panel.loadButton = jsonButtonRow.add("button", undefined, "JSONを読み込む");
+    panel.loadButton.preferredSize = [145, 30];
+    panel.resetJsonButton = jsonButtonRow.add("button", undefined, "リセット");
+    panel.resetJsonButton.preferredSize = [75, 30];
     // オーディオファイルを追加するボタン
     panel.addAudioButton = panel.add(
       "button",
@@ -72,6 +79,23 @@ function createUI(thisObj) {
         panel.statusText.text = "JSONファイルを読み込みました";
       } catch (e) {
         logger.log("JSONの読み込み中にエラーが発生しました: " + e.toString());
+        panel.statusText.text = "エラーが発生しました";
+        alert("エラーが発生しました: " + e.toString());
+      }
+    };
+
+    // JSONリセットボタンのクリックイベント
+    panel.resetJsonButton.onClick = function () {
+      try {
+        logger.log("JSONリセットボタンがクリックされました");
+        jsonData = null;
+        panel.resultText.text = "";
+        panel.sectionCountText.text = "";
+        panel.createCompButton.enabled = false;
+        panel.statusText.text = "JSONをリセットしました";
+        logger.log("JSONをリセットしました");
+      } catch (e) {
+        logger.log("JSONリセット中にエラーが発生しました: " + e.toString());
         panel.statusText.text = "エラーが発生しました";
         alert("エラーが発生しました: " + e.toString());
       }

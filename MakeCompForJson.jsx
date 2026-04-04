@@ -3,6 +3,7 @@
 var scriptFolder = new File($.fileName).parent.absoluteURI;
 
 // 各ファイルを読み込む
+$.evalFile(scriptFolder + "/json2.jsx");
 $.evalFile(scriptFolder + "/logger.jsx");
 $.evalFile(scriptFolder + "/jsonHandler.jsx");
 $.evalFile(scriptFolder + "/audioHandler.jsx");
