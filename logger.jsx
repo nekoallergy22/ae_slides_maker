@@ -17,8 +17,9 @@ function Logger(scriptName) {
       var timestamp = new Date().toLocaleString();
       var logMessage = timestamp + " [" + this.scriptName + "] " + message;
 
-      // ファイルを開く前にエンコーディングを設定
+      // ファイルを開く前にエンコーディングと改行コードを設定
       this.logFile.encoding = "UTF-8";
+      this.logFile.lineFeed = "Unix";
       if (this.logFile.open("a")) {
         this.logFile.writeln(logMessage); // UTF-8で直接書き込む
         this.logFile.close();

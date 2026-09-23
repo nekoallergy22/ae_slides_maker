@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-After Effects Audio Text Animator is an Adobe After Effects ExtendScript-based automation tool that processes audio files and JSON configuration to automatically create compositions with text animations. The script is designed to work with After Effects CS3 or later (tested on After Effects 2025).
+ae_slides_maker (formerly After Effects Audio Text Animator) is an Adobe After Effects ExtendScript-based automation tool that processes audio files and JSON configuration to automatically create compositions with text animations. The script is designed to work with After Effects CS3 or later (tested on After Effects 2026).
 
 ## Installation & Deployment
 
@@ -16,9 +16,9 @@ chmod +x transport.sh
 ./transport.sh
 ```
 
-The script `utils/transport.sh` copies all necessary `.jsx` files to the After Effects ScriptUI Panels directory (`/Applications/Adobe After Effects 2025/Scripts/ScriptUI Panels/`), archiving any existing versions with timestamps.
+The script `utils/transport.sh` copies all necessary `.jsx` files to the After Effects ScriptUI Panels directory (`/Applications/Adobe After Effects 2026/Scripts/ScriptUI Panels/`), archiving any existing versions with timestamps.
 
-After installation, launch After Effects and access the script via `Window > MakeCompForJson.jsx`.
+After installation, launch After Effects and access the script via `Window > ae_slides_maker.jsx`.
 
 ## Architecture Overview
 
@@ -26,7 +26,7 @@ After installation, launch After Effects and access the script via `Window > Mak
 
 The codebase follows a modular architecture where functionality is split across specialized `.jsx` files that are dynamically loaded by the main script:
 
-**MakeCompForJson.jsx** (Entry Point)
+**ae_slides_maker.jsx** (Entry Point)
 - Loads all modules using `$.evalFile()` from the script folder
 - Creates and displays the UI panel
 - Module load order:
@@ -44,7 +44,7 @@ The codebase follows a modular architecture where functionality is split across 
 
 ### Core Modules
 
-**logger.jsx** - Simple logging utility that writes to `MakeCompForJson.txt` on the desktop with timestamps
+**logger.jsx** - Simple logging utility that writes to `ae_slides_maker.txt` on the desktop with timestamps
 
 **ui.jsx** - ScriptUI panel with 6 main buttons:
 1. "JSONを読み込む" - Load JSON configuration
@@ -89,11 +89,12 @@ The codebase follows a modular architecture where functionality is split across 
 5. Creates main composition with all slides
 
 **shapeAnimator.jsx** - Applies animations to layers:
-- `animateShapeLayers()` - Main function triggered by UI button
-- Works on active composition and all nested sub-compositions
-- Shape layers: Scale animation from [0,0] to current scale over 20 frames
+- `animateShapeLayers()` - Main function triggered by UI button; processes all comps in the "slide" folder recursively
+- `extendCompTreeDuration()` - Recursively extends layer out-points to comp duration AND extends nested sub-comp durations (CompItem.duration) when they are shorter than needed by the parent
+- `animateCompTree()` - Recursively applies animations to a comp and all nested sub-comps; a `visited` map (keyed by comp.id) ensures shared sub-comps are only animated once
+- Shape layers: Scale animation from [0,0] to current scale over 20 frames ("title-line" layers use 180 frames)
 - Text layers: Opacity animation from 0% to current opacity over 20 frames
-- `extendLayersToCompDuration()` - Extends all non-audio layers to match composition duration
+- `extendLayersToCompDuration()` - Extends all non-audio layers in one comp to match its duration
 - `applyInOutOpacityTransition()` - 20-frame fade in/out for slide transitions in main comp
 - All animations use bezier easing (KeyframeEase: speed=0.5, influence=50)
 
@@ -144,6 +145,13 @@ The script expects JSON with this structure:
   ]
 }
 ```
+
+### Alternative Format: tts_export.json
+
+`jsonHandler.jsx` auto-detects the `tts_export.json` format (with `lines`/`slides` keys instead of `audios`/`slide`) and converts it to the internal format on load via `convertTtsExport()`:
+- `lines` → `audios` (`line_index` → `id`, `slide_id` → `slideNumber`, duration seconds → milliseconds)
+- `slides` → `slide` (`line_indices` → `audio_list`, duration seconds → milliseconds, `margin` defaults to 1000ms)
+- `project.name` is taken from the JSON file's parent folder name
 
 **Key Points:**
 - `duration` and `margin` are in milliseconds

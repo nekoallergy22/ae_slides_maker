@@ -43,27 +43,31 @@ function animateShapeLayers() {
       return false;
     }
 
-    // 各コンポジションに対してアニメーションを適用
+    // 各コンポジションに対して再帰的にアニメーションと長さ調整を適用
     var totalShapesAnimated = 0;
     var totalTextLayersAnimated = 0;
     var totalLayersExtended = 0;
+    var totalCompsProcessed = 0;
+    var visited = {}; // 同じサブコンポを二重処理しないためのマップ（キー: comp.id）
 
     for (var k = 0; k < uniqueComps.length; k++) {
       var comp = uniqueComps[k];
-      var result = animateLayersInComp(comp);
+
+      // レイヤー長さ調整＋サブコンポ自体の長さ延長（再帰）
+      totalLayersExtended += extendCompTreeDuration(comp, 0);
+
+      // アニメーション適用（再帰・同一コンポは1回のみ）
+      var result = animateCompTree(comp, visited, 0);
       totalShapesAnimated += result.shapesAnimated;
       totalTextLayersAnimated += result.textLayersAnimated;
-
-      // シェイプレイヤーのout点をコンポジションの長さに合わせる
-      var extendResult = extendLayersToCompDuration(comp);
-      totalLayersExtended += extendResult;
+      totalCompsProcessed += result.compsProcessed;
     }
 
     // 最終的な結果のログ
     logger.log(
       "合計: " +
-        uniqueComps.length +
-        "個のコンポジションに" +
+        totalCompsProcessed +
+        "個のコンポジション（サブコンポ含む）に" +
         (totalShapesAnimated + totalTextLayersAnimated) +
         "個のアニメーションを適用し、" +
         totalLayersExtended +
@@ -75,7 +79,8 @@ function animateShapeLayers() {
     var totalAnimated = totalShapesAnimated + totalTextLayersAnimated;
 
     if (totalAnimated > 0 || totalLayersExtended > 0) {
-      var message = uniqueComps.length + "個のコンポジションに対して、";
+      var message =
+        totalCompsProcessed + "個のコンポジション（サブコンポ含む）に対して、";
       if (totalShapesAnimated > 0) {
         message += totalShapesAnimated + "個の図形レイヤー";
       }
@@ -100,6 +105,89 @@ function animateShapeLayers() {
     alert("エラーが発生しました: " + e.toString());
     return false;
   }
+}
+
+// コンポジションツリー全体の長さ調整を再帰的に行う関数
+// 1) コンポ内の非オーディオレイヤーのout点をコンポの長さに合わせる
+// 2) サブコンポ自体の長さ（duration）が不足していれば延長する
+// 3) サブコンポの中身も同様に再帰処理する
+function extendCompTreeDuration(comp, depth) {
+  var logger = new Logger("ShapeAnimator");
+
+  // 【重要】先にサブコンポ自体の長さ（duration）を延長する。
+  // AEは時間リマップなしのコンポレイヤーのout点をソースの長さより先に
+  // 延ばせない（サイレントにクランプされる）ため、レイヤー長調整より
+  // 前にソース側を延長しておく必要がある。
+  for (var i = 1; i <= comp.numLayers; i++) {
+    var layer = comp.layer(i);
+    if (layer.source && layer.source instanceof CompItem) {
+      var subComp = layer.source;
+
+      // 親コンポの末尾まで表示するために必要なソースの長さ
+      var requiredDuration = comp.duration - layer.startTime;
+      if (subComp.duration < requiredDuration) {
+        logger.log(
+          "サブコンポ「" +
+            subComp.name +
+            "」の長さを " +
+            subComp.duration.toFixed(2) +
+            "秒 → " +
+            requiredDuration.toFixed(2) +
+            "秒 に延長します (親: " +
+            comp.name +
+            ")"
+        );
+        subComp.duration = requiredDuration;
+      }
+    }
+  }
+
+  // このコンポ内のレイヤーの長さを調整（サブコンポ延長済みなのでout点を末尾まで延ばせる）
+  var extended = extendLayersToCompDuration(comp);
+
+  // サブコンポの中身も再帰処理
+  for (var j = 1; j <= comp.numLayers; j++) {
+    var subLayer = comp.layer(j);
+    if (subLayer.source && subLayer.source instanceof CompItem) {
+      extended += extendCompTreeDuration(subLayer.source, depth + 1);
+    }
+  }
+
+  return extended;
+}
+
+// アニメーション適用を再帰的に行う関数
+// 同一コンポジションが複数の場所で使われていても1回だけ処理する（visitedで管理）
+function animateCompTree(comp, visited, depth) {
+  var logger = new Logger("ShapeAnimator");
+  var totals = { shapesAnimated: 0, textLayersAnimated: 0, compsProcessed: 0 };
+
+  if (visited[comp.id]) {
+    logger.log("アニメーション適用スキップ（処理済み）: " + comp.name);
+    return totals;
+  }
+  visited[comp.id] = true;
+  totals.compsProcessed = 1;
+
+  logger.log("アニメーション適用 (深さ" + depth + "): " + comp.name);
+
+  // このコンポ内の図形・テキストレイヤーにアニメーションを適用
+  var result = animateLayersInComp(comp);
+  totals.shapesAnimated += result.shapesAnimated;
+  totals.textLayersAnimated += result.textLayersAnimated;
+
+  // サブコンポジションへ再帰
+  for (var i = 1; i <= comp.numLayers; i++) {
+    var layer = comp.layer(i);
+    if (layer.source && layer.source instanceof CompItem) {
+      var sub = animateCompTree(layer.source, visited, depth + 1);
+      totals.shapesAnimated += sub.shapesAnimated;
+      totals.textLayersAnimated += sub.textLayersAnimated;
+      totals.compsProcessed += sub.compsProcessed;
+    }
+  }
+
+  return totals;
 }
 
 // レイヤーの長さをコンポジションの長さに合わせる関数
@@ -147,11 +235,15 @@ function animateLayersInComp(comp) {
     if (isShapeLayer(layer)) {
       // 「title-line」という名前のレイヤーの場合は180フレーム、それ以外は20フレーム
       var animationFrames = (layer.name === "title-line") ? 180 : 20;
-      applyScaleAnimation(layer, layerInPoint, comp.frameRate, animationFrames);
-      shapesAnimated++;
+      if (
+        applyScaleAnimation(layer, layerInPoint, comp.frameRate, animationFrames)
+      ) {
+        shapesAnimated++;
+      }
     } else if (layer instanceof TextLayer) {
-      applyOpacityAnimation(layer, layerInPoint, comp.frameRate);
-      textLayersAnimated++;
+      if (applyOpacityAnimation(layer, layerInPoint, comp.frameRate)) {
+        textLayersAnimated++;
+      }
     }
   }
 
@@ -186,6 +278,11 @@ function applyScaleAnimation(layer, startTime, frameRate, frames) {
   var transform = layer.transform;
   var scale = transform.scale;
 
+  // 既にキーフレームがある場合はスキップ（再実行時の二重適用・値破壊を防ぐ）
+  if (scale.numKeys > 0) {
+    return false;
+  }
+
   // フレーム数が指定されていない場合はデフォルト20フレーム
   if (typeof frames === "undefined") {
     frames = 20;
@@ -205,11 +302,17 @@ function applyScaleAnimation(layer, startTime, frameRate, frames) {
 
   // イージングを適用
   applyEasing(scale);
+  return true;
 }
 
 // 不透明度アニメーションを適用する関数
 function applyOpacityAnimation(layer, startTime, frameRate) {
   var opacity = layer.transform.opacity;
+
+  // 既にキーフレームがある場合はスキップ（再実行時の二重適用・値破壊を防ぐ）
+  if (opacity.numKeys > 0) {
+    return false;
+  }
 
   // 現在の不透明度値を保存
   var currentOpacity = opacity.value;
@@ -225,6 +328,7 @@ function applyOpacityAnimation(layer, startTime, frameRate) {
 
   // イージングを適用
   applyEasing(opacity);
+  return true;
 }
 
 // イージングを適用する関数

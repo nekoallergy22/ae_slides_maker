@@ -1,4 +1,4 @@
-# After Effects Audio Text Animator
+# ae_slides_maker
 
 JSONファイルとオーディオファイルから自動的にAfter Effectsコンポジションを作成し、アニメーションを適用するスクリプトです。
 
@@ -19,7 +19,7 @@ chmod +x transport.sh
 
 スクリプトは `/Applications/Adobe After Effects 2025/Scripts/ScriptUI Panels/` にコピーされます。
 
-After Effectsを起動し、`ウィンドウ > MakeCompForJson.jsx` からパネルを開きます。
+After Effectsを起動し、`ウィンドウ > ae_slides_maker.jsx` からパネルを開きます。
 
 ## 使用方法
 

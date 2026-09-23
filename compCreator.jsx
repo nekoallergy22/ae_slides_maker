@@ -3,9 +3,24 @@
 function createCompositions() {
   var logger = new Logger("CompCreator");
 
-  if (!jsonData || !jsonData.slide) {
+  if (!jsonData) {
     alert("有効なJSONデータが読み込まれていません。");
-    logger.log("有効なJSONデータが読み込まれていません");
+    logger.log(
+      "エラー: jsonDataが " +
+        (typeof jsonData === "undefined" ? "undefined" : "null") +
+        " です（JSON読み込み前、またはリセット後の状態）"
+    );
+    return;
+  }
+
+  if (!jsonData.slide) {
+    alert(
+      "JSONデータに 'slide' キーがありません。\nJSONファイルの構造を確認してください。"
+    );
+    logger.log(
+      "エラー: jsonDataは存在しますが 'slide' キーがありません。詳細: " +
+        describeJsonData()
+    );
     return;
   }
 

@@ -121,6 +121,18 @@ function createUI(thisObj) {
     panel.createCompButton.onClick = function () {
       try {
         logger.log("コンポジション作成ボタンがクリックされました");
+        logger.log(
+          "押下時の状態: engine=" +
+            $.engineName +
+            ", jsonData=" +
+            (typeof describeJsonData === "function"
+              ? describeJsonData()
+              : typeof jsonData) +
+            ", audioFiles=" +
+            (typeof audioFiles !== "undefined" && audioFiles
+              ? audioFiles.length + "件"
+              : "未定義")
+        );
 
         // オーディオファイルが追加されているか確認
         if (!audioFiles || audioFiles.length === 0) {

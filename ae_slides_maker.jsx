@@ -1,4 +1,4 @@
-// MakeCompForJson.jsx - メインスクリプトファイル
+// ae_slides_maker.jsx - メインスクリプトファイル
 
 var scriptFolder = new File($.fileName).parent.absoluteURI;
 
@@ -17,8 +17,8 @@ $.evalFile(scriptFolder + "/subCompTimestampExporter.jsx");
 $.evalFile(scriptFolder + "/ui.jsx");
 
 // グローバルロガーインスタンスを作成
-var logger = new Logger("MakeCompForJson");
-logger.log("スクリプトを開始しました");
+var logger = new Logger("ae_slides_maker");
+logger.log("スクリプトを開始しました (読み込み元: " + scriptFolder + ")");
 
 // UIパネルを作成
 var myPanel = createUI(this);
